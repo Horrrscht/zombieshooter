@@ -21,9 +21,10 @@ void setup() {
   for (int y = 0; y < grid[barricadeX / tileSize].length; y++) {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
-  zombies.add(new Zombie(tileSize, 30*tileSize, 15*tileSize));
-  zombies.add(new Zombie(tileSize, 30*tileSize, 14*tileSize));
-  defenders.add(new Defender(tileSize, 3*tileSize, 13*tileSize));
+  zombies.add(new Zombie(tileSize, 30*tileSize, 15*tileSize, 0));
+  zombies.add(new Zombie(tileSize, 30*tileSize, 14*tileSize, 1));
+  defenders.add(new Defender(tileSize, 3*tileSize, 13*tileSize, 2));
+  defenders.add(new Defender(tileSize, 3*tileSize, 18*tileSize, 3));
   defenders.get(0).assignTarget(zombies.get(0));
 }
 
@@ -32,6 +33,7 @@ void draw() {
   for (int x = 0; x < grid.length; x++) {
     for (int y = 0; y < grid[x].length; y++) {
       fill(grid[x][y]);
+      stroke(0);
       rect(x*tileSize, y*tileSize, tileSize, tileSize);
     }
   }
@@ -40,9 +42,11 @@ void draw() {
     if (zombie.getX() > barricadeX + tileSize) {
       zombie.move(-1, 0);
     }
+    stroke(0);
     zombie.render();
   }
   for (Defender defender : defenders) {
+    stroke(0);
     defender.render();
     defender.shootTarget();
   }
@@ -53,7 +57,8 @@ void mouseMoved() {
 
 void mousePressed() {
   for (Zombie zombie : zombies) {
-    if (dist(zombie.getX(), zombie.getY(), mouseX, mouseY) <= zombie.getRadius()) {
+    if (dist(zombie.getX(), zombie.getY(), mouseX, mouseY) 
+      <= zombie.getRadius()) {
       zombie.select();
       selectedZombie = zombie;
       if (selectedDefender != null) {
@@ -65,12 +70,16 @@ void mousePressed() {
     }
   }
   for (Defender defender : defenders) {
-    if (dist(defender.getX(), defender.getY(), mouseX, mouseY) <= defender.getRadius()) {
+    if (dist(defender.getX(), defender.getY(), mouseX, mouseY) 
+      <= defender.getRadius()) {
       selectedDefender = defender;
       defender.select();
-    } else {
-      selectedDefender = null;
-      defender.unSelect();
+      for (Defender defenderInner : defenders) {
+        if (defenderInner.id != defender.id) {
+          defender.unSelect();
+        }
+      }
+      break;
     }
   }
 }

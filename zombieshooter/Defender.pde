@@ -3,11 +3,13 @@ class Defender {
   private int radius;
   private boolean isSelected = false;
   private Zombie target;
+  public final int id;
 
-  public Defender(int radius, int x, int y) {
+  public Defender(int radius, int x, int y, int id) {
     this.x = x;
     this.y = y;
     this.radius = radius;
+    this.id = id;
   }
 
   public void render() {
@@ -28,10 +30,12 @@ class Defender {
   }
 
   public void select() {
+    println("Defender " + id + " selected");
     isSelected = true;
   }
 
   public void unSelect() {
+    println("Defender " + id + " unselected");
     isSelected = false;
   }
 
@@ -40,6 +44,7 @@ class Defender {
   }
 
   public void assignTarget(Zombie target) {
+    println("Assigned zombie " + target.id + " to defender " + id);
     this.target = target;
   }
 

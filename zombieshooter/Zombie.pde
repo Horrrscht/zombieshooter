@@ -2,11 +2,13 @@ class Zombie {
   private int radius;
   private int x, y;
   private boolean isSelected = false;
+  public final int id;
 
-  public Zombie(int radius, int x, int y) {
+  public Zombie(int radius, int x, int y, int id) {
     this.x = x;
     this.y = y;
     this.radius = radius;
+    this.id = id;
   }
 
   public void move(int xDistance, int yDistance) {
@@ -32,10 +34,12 @@ class Zombie {
   }
   
   public void select() {
+    println("Zombie " + id + " selected");
     isSelected = true;
   }
   
   public void unSelect() {
+    println("Zombie " + id + " unselected");
     isSelected = false;
   }
   
