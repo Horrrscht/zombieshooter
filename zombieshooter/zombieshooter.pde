@@ -38,7 +38,6 @@ void draw() {
     }
   }
   for (Zombie zombie : zombies) {
-    //println("Rendering to " + zombie.x, zombie.y);
     if (zombie.getX() > barricadeX + tileSize) {
       zombie.move(-1, 0);
     }
@@ -80,6 +79,10 @@ void mousePressed() {
         }
       }
       break;
+      /*
+      This is so unbelievably fugly...
+      But I don't want to use fancy Lambda-stuff outside of the Processing API.
+      */
     }
   }
 }
