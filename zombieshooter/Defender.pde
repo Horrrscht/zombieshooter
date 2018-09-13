@@ -4,12 +4,14 @@ class Defender {
   private boolean isSelected = false;
   private Zombie target;
   public final int id;
+  public final int damage;
 
-  public Defender(int radius, int x, int y, int id) {
+  public Defender(int radius, int x, int y, int id, int damage) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.id = id;
+    this.damage = damage;
   }
 
   public void render() {
@@ -56,6 +58,7 @@ class Defender {
     if (target != null) {
       stroke(#FF0808);
       line(x, y, target.getX(), target.getY());
+      target.receiveDamage(damage);
     }
   }
 }

@@ -21,10 +21,10 @@ void setup() {
   for (int y = 0; y < grid[barricadeX / tileSize].length; y++) {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
-  zombies.add(new Zombie(tileSize, 30*tileSize, 15*tileSize, 0));
-  zombies.add(new Zombie(tileSize, 30*tileSize, 14*tileSize, 1));
-  defenders.add(new Defender(tileSize, 3*tileSize, 13*tileSize, 2));
-  defenders.add(new Defender(tileSize, 3*tileSize, 18*tileSize, 3));
+  zombies.add(new Zombie(tileSize, 30*tileSize, 15*tileSize, 0, 100));
+  zombies.add(new Zombie(tileSize, 30*tileSize, 14*tileSize, 1, 100));
+  defenders.add(new Defender(tileSize, 3*tileSize, 13*tileSize, 2, 1));
+  defenders.add(new Defender(tileSize, 3*tileSize, 18*tileSize, 3, 1));
   defenders.get(0).assignTarget(zombies.get(0));
 }
 
