@@ -6,7 +6,7 @@ ArrayList<Zombie> zombies = new ArrayList();
 ArrayList<Defender> defenders = new ArrayList();
 
 PVector defenderPositions[] = {
-  new PVector(3*tileSize, 13*tileSize),
+  new PVector(3*tileSize, 13*tileSize), 
   new PVector(3*tileSize, 19*tileSize)
 };
 
