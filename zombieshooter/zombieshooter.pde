@@ -2,21 +2,30 @@ color grid[][] = new color[32][32];
 int tileSize = 16;
 int barricadeX = tileSize * 5;
 
+int enemyCount = 10;
+
 ArrayList<Zombie> zombies = new ArrayList();
 ArrayList<Defender> defenders = new ArrayList();
 
 PVector defenderPositions[] = {
   new PVector(3*tileSize, 13*tileSize), 
-  new PVector(3*tileSize, 19*tileSize)
+  new PVector(3*tileSize, 19*tileSize), 
+  new PVector(3*tileSize, 10*tileSize), 
+  new PVector(3*tileSize, 22*tileSize)
 };
 
 Zombie selectedZombie = null;
 Defender selectedDefender = null;
 
+int w = grid.length * tileSize;
+int h = grid[0].length * tileSize;
+
+void settings() {
+
+  size(w, h);
+}
+
 void setup() {
-  int w = grid.length * tileSize;
-  int h = grid[0].length * tileSize;
-  size(512, 512);
   background(0);
   for (int y = 14; y < 18; y++) {
     for (int x = 0; x < grid[y].length; x++) {
@@ -26,14 +35,17 @@ void setup() {
   for (int y = 0; y < grid[barricadeX / tileSize].length; y++) {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
-  zombies.add(new Zombie(tileSize, 30*tileSize, 15*tileSize, 0, 1000));
-  zombies.add(new Zombie(tileSize, 33*tileSize, 14*tileSize, 1, 500));
   defenders.add(new Defender(tileSize, (int)defenderPositions[0].x, (int)defenderPositions[0].y, 2, 1));
   defenders.add(new Defender(tileSize, (int)defenderPositions[1].x, (int)defenderPositions[1].y, 3, 1));
-  defenders.get(0).assignTarget(zombies.get(0));
+  defenders.add(new Defender(tileSize, (int)defenderPositions[2].x, (int)defenderPositions[2].y, 2, 1));
+  defenders.add(new Defender(tileSize, (int)defenderPositions[3].x, (int)defenderPositions[3].y, 3, 1));
 }
 
 void draw() {
+  if (enemyCount > 0 && random(1) > 0.9 ) {
+    enemyCount--;
+    zombies.add(new Zombie(tileSize, (int)(w + random(100)), (14+(int)random(5))*tileSize, 0, 200));
+  }
   stroke(0);
   for (int x = 0; x < grid.length; x++) {
     for (int y = 0; y < grid[x].length; y++) {
