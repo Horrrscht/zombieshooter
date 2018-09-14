@@ -22,7 +22,7 @@ void setup() {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
   zombies.add(new Zombie(tileSize, 30*tileSize, 15*tileSize, 0, 1000));
-  zombies.add(new Zombie(tileSize, 33*tileSize, 14*tileSize, 1, 1000));
+  zombies.add(new Zombie(tileSize, 33*tileSize, 14*tileSize, 1, 500));
   defenders.add(new Defender(tileSize, 3*tileSize, 13*tileSize, 2, 1));
   defenders.add(new Defender(tileSize, 3*tileSize, 18*tileSize, 3, 1));
   defenders.get(0).assignTarget(zombies.get(0));
@@ -47,7 +47,10 @@ void draw() {
   for (Defender defender : defenders) {
     stroke(0);
     defender.render();
-    defender.shootTarget();
+    if (defender.shootTarget() <= 0) {
+      zombies.remove(defender.getTarget());
+      defender.assignTarget(randomZombie(zombies));
+    }
   }
 }
 
@@ -85,4 +88,9 @@ void mousePressed() {
        */
     }
   }
+}
+
+Zombie randomZombie(ArrayList<Zombie> zombies) {
+  if (zombies.size() == 0) return null; 
+  return zombies.get((int)(Math.random()*zombies.size()));
 }

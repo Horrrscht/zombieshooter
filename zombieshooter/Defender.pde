@@ -48,7 +48,7 @@ class Defender {
   }
 
   public void assignTarget(Zombie target) {
-    println("Assigned zombie " + target.id + " to defender " + id);
+    //println("Assigned zombie " + target.id + " to defender " + id);
     this.target = target;
   }
 
@@ -56,11 +56,12 @@ class Defender {
     return target;
   }
 
-  public void shootTarget() {
+  public int shootTarget() {
     if (target != null) {
       stroke(#FF0808);
       line(x, y, target.getX(), target.getY());
-      target.receiveDamage(damage);
+      return target.receiveDamage(damage);
     }
+    return -1;
   }
 }
