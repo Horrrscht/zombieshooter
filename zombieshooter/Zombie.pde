@@ -5,17 +5,20 @@ class Zombie {
   public final int id;
   private int health;
   public final int maxHealth;
-  final color selectedColor = #F02C2C;
-  final color unSelectedColor = #6319E5; 
-  final color healthColor = #08FF16;
+  public final color selectedColor = #F02C2C;
+  public final color unSelectedColor = #6319E5; 
+  public final color healthColor = #08FF16;
+  public final int damage;
+  
 
-  public Zombie(int radius, int x, int y, int id, int health) {
+  public Zombie(int radius, int x, int y, int id, int health, int damage) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.id = id;
     this.health = health;
     maxHealth = health;
+    this.damage = damage;
   }
 
   public void move(int xDistance, int yDistance) {

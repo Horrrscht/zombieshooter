@@ -7,6 +7,8 @@ int enemyCount = 10;
 ArrayList<Zombie> zombies = new ArrayList();
 ArrayList<Defender> defenders = new ArrayList();
 
+int barrierLP = 1000;
+
 PVector defenderPositions[] = {
   new PVector(3*tileSize, 13*tileSize), 
   new PVector(3*tileSize, 19*tileSize), 
@@ -41,10 +43,15 @@ void setup() {
   defenders.add(new Defender(tileSize, (int)defenderPositions[3].x, (int)defenderPositions[3].y, 3, 1));
 }
 
-void draw() {
+void draw() { 
   if (enemyCount > 0 && random(1) > 0.9 ) {
     enemyCount--;
-    zombies.add(new Zombie(tileSize, (int)(w + random(100)), (14+(int)random(5))*tileSize, 0, 200));
+    zombies.add(new Zombie(tileSize, 
+                          (int)(w + random(100)), 
+                          (14+(int)random(5))*tileSize, 
+                          0, 
+                          100 + (int)random(1000), 
+                          1));
   }
   stroke(0);
   for (int x = 0; x < grid.length; x++) {
@@ -54,9 +61,16 @@ void draw() {
       rect(x*tileSize, y*tileSize, tileSize, tileSize);
     }
   }
+  fill(#FFFFFF);
+  text(barrierLP, 20, 20);
   for (Zombie zombie : zombies) {
     if (zombie.getX() > barricadeX + tileSize) {
       zombie.move(-1, 0);
+    } else {
+      if ((barrierLP -= zombie.damage) <= 0) {
+        barrierLP = 0;
+        noLoop();
+      }
     }
     stroke(0);
     zombie.render();
