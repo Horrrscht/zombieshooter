@@ -5,6 +5,11 @@ int barricadeX = tileSize * 5;
 ArrayList<Zombie> zombies = new ArrayList();
 ArrayList<Defender> defenders = new ArrayList();
 
+PVector defenderPositions[] = {
+  new PVector(3*tileSize, 13*tileSize),
+  new PVector(3*tileSize, 19*tileSize)
+};
+
 Zombie selectedZombie = null;
 Defender selectedDefender = null;
 
@@ -23,8 +28,8 @@ void setup() {
   }
   zombies.add(new Zombie(tileSize, 30*tileSize, 15*tileSize, 0, 1000));
   zombies.add(new Zombie(tileSize, 33*tileSize, 14*tileSize, 1, 500));
-  defenders.add(new Defender(tileSize, 3*tileSize, 13*tileSize, 2, 1));
-  defenders.add(new Defender(tileSize, 3*tileSize, 18*tileSize, 3, 1));
+  defenders.add(new Defender(tileSize, (int)defenderPositions[0].x, (int)defenderPositions[0].y, 2, 1));
+  defenders.add(new Defender(tileSize, (int)defenderPositions[1].x, (int)defenderPositions[1].y, 3, 1));
   defenders.get(0).assignTarget(zombies.get(0));
 }
 
