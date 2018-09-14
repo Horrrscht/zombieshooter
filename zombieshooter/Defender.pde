@@ -5,6 +5,8 @@ class Defender {
   private Zombie target;
   public final int id;
   public final int damage;
+  final color selectedColor = #F02C2C;
+  final color unSelectedColor = #6319E5; 
 
   public Defender(int radius, int x, int y, int id, int damage) {
     this.x = x;
@@ -15,7 +17,7 @@ class Defender {
   }
 
   public void render() {
-    fill(isSelected?255:123);
+    fill(isSelected?selectedColor:unSelectedColor);
     ellipse(x, y, radius, radius);
   }
 

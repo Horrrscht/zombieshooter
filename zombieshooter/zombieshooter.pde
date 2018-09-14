@@ -21,8 +21,8 @@ void setup() {
   for (int y = 0; y < grid[barricadeX / tileSize].length; y++) {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
-  zombies.add(new Zombie(tileSize, 30*tileSize, 15*tileSize, 0, 100));
-  zombies.add(new Zombie(tileSize, 30*tileSize, 14*tileSize, 1, 100));
+  zombies.add(new Zombie(tileSize, 30*tileSize, 15*tileSize, 0, 1000));
+  zombies.add(new Zombie(tileSize, 33*tileSize, 14*tileSize, 1, 1000));
   defenders.add(new Defender(tileSize, 3*tileSize, 13*tileSize, 2, 1));
   defenders.add(new Defender(tileSize, 3*tileSize, 18*tileSize, 3, 1));
   defenders.get(0).assignTarget(zombies.get(0));
@@ -81,8 +81,8 @@ void mousePressed() {
       break;
       /*
       This is so unbelievably fugly...
-      But I don't want to use fancy Lambda-stuff outside of the Processing API.
-      */
+       But I don't want to use fancy Lambda-stuff outside of the Processing API.
+       */
     }
   }
 }

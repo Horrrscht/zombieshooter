@@ -4,6 +4,7 @@ class Zombie {
   private boolean isSelected = false;
   public final int id;
   private int health;
+  public final int maxHealth;
   final color selectedColor = #F02C2C;
   final color unSelectedColor = #6319E5; 
   final color healthColor = #08FF16;
@@ -14,6 +15,7 @@ class Zombie {
     this.radius = radius;
     this.id = id;
     this.health = health;
+    maxHealth = health;
   }
 
   public void move(int xDistance, int yDistance) {
@@ -25,7 +27,9 @@ class Zombie {
     fill(isSelected?selectedColor:unSelectedColor);
     ellipse(x, y, radius, radius);
     fill(healthColor);
-    rect(x - radius/2, y - 20, 20, 5);
+    if (health > 0) {
+      rect(x - radius/2, y - 20, (health/ (float) maxHealth)  * radius, 5);
+    }
   }
 
   public int getX() {
@@ -59,7 +63,9 @@ class Zombie {
   }
 
   public int receiveDamage(int damage) {
-    health -= damage;
+    if ((health -= damage) <= 0) {
+      health = 0;
+    }
     return health;
   }
 }
