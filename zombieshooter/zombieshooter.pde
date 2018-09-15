@@ -17,11 +17,15 @@ ArrayList<Defender> defenders = new ArrayList();
 int barrierLP = Integer.MAX_VALUE;
 
 PVector defenderPositions[] = {
+  new PVector(3*tileSize, 10*tileSize), 
   new PVector(3*tileSize, 13*tileSize), 
   new PVector(3*tileSize, 19*tileSize), 
-  new PVector(3*tileSize, 10*tileSize), 
-  new PVector(3*tileSize, 22*tileSize)
+  new PVector(3*tileSize, 22*tileSize), 
+  new PVector(3*tileSize, 15*tileSize), 
+  new PVector(3*tileSize, 17*tileSize) 
 };
+
+Defender usedDefenderPositions[] = new Defender[defenderPositions.length]; 
 
 Zombie selectedZombie = null;
 Defender selectedDefender = null;
@@ -43,10 +47,24 @@ void setup() {
   for (int y = 0; y < grid[barricadeX / tileSize].length; y++) {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
-  spawnDefender(0);
-  spawnDefender(1);
-  spawnDefender(2);
-  spawnDefender(3);
+  spawnRandomDefender();
+  spawnRandomDefender();
+  spawnRandomDefender();
+  spawnRandomDefender();
+  prepareFight(10);
+}
+
+void prepareFight(int enemies) {
+  enemyCount = enemies;
+}
+
+Defender spawnRandomDefender() {
+  for (int i = 0; i < usedDefenderPositions.length; i++) {
+    if (usedDefenderPositions[i] == null) {
+      return spawnDefender(i);
+    }
+  }
+  return null;
 }
 
 Defender spawnDefender(int defenderPosition) {
@@ -56,6 +74,7 @@ Defender spawnDefender(int defenderPosition) {
     defenderPosition, 
     1); 
   defenders.add(out);
+  usedDefenderPositions[defenderPosition] = out;
   return out;
 }
 
@@ -64,7 +83,11 @@ void draw() {
   case betweenRounds:
     drawGrid();
     renderDefenders();
-    text("Do something", 100, 100);
+    fill(100);
+    rect(0, 0, 100, 100);
+    fill(255);
+    rect(100, 0, 100, 100);
+    text("Do something", 200, 200);
     break;
   case fighting:
     spawnZombie();
@@ -87,7 +110,13 @@ void mouseMoved() {
 void mousePressed() {
   switch (state) {
   case betweenRounds:
-    state = State.fighting;
+    if (mouseInRect(0, 0, 100, 100)) {
+      state = State.fighting;
+      prepareFight(10);
+    }
+    if (mouseInRect(100, 0, 100, 100)) {
+      spawnRandomDefender();
+    }
     break;
   case fighting:
   default:
@@ -102,6 +131,7 @@ void keyPressed() {
   case betweenRounds:
     if (key == 'f') {
       state = State.fighting;
+      prepareFight(10);
     }
     break;
   case fighting:
@@ -166,25 +196,28 @@ void spawnZombie() {
   }
 }
 
-
-void defenderSelection() {
+Defender getSelectedDefender() {
   for (Defender defender : defenders) {
     if (dist(defender.getX(), defender.getY(), mouseX, mouseY) 
       <= defender.getRadius()) {
-      selectedDefender = defender;
-      defender.select();
-      for (Defender defenderInner : defenders) {
-        if (defenderInner.id != defender.id) {
-          defender.unSelect();
-        }
-      }
-      break;
-      /*
-      This is so unbelievably fugly...
-       But I don't want to use fancy Lambda-stuff outside of the Processing API.
-       */
+      return defender;
     }
   }
+  return selectedDefender;
+}
+
+void defenderSelection() {
+  Defender newSelected = getSelectedDefender();
+  if (newSelected == null) {
+    return;
+  }
+  newSelected.select();
+  for (Defender defender : defenders) {
+    if (newSelected.id != defender.id) {
+      defender.unSelect();
+    }
+  }   
+  selectedDefender = newSelected;
 }
 
 void zombieSelection() {
@@ -206,4 +239,8 @@ void zombieSelection() {
 Zombie randomZombie(ArrayList<Zombie> zombies) {
   if (zombies.size() == 0) return null; 
   return zombies.get((int)(Math.random()*zombies.size()));
+}
+
+boolean mouseInRect(int x, int y, int w, int h) {
+  return (mouseX >= x && mouseX <= x+w && mouseY > y && mouseY <= y+h);
 }
