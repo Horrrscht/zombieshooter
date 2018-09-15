@@ -48,9 +48,6 @@ void setup() {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
   spawnRandomDefender();
-  spawnRandomDefender();
-  spawnRandomDefender();
-  spawnRandomDefender();
   prepareFight(10);
 }
 
