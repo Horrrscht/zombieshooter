@@ -37,46 +37,49 @@ void setup() {
   for (int y = 0; y < grid[barricadeX / tileSize].length; y++) {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
-  defenders.add(new Defender(tileSize, 
-    (int)defenderPositions[0].x, 
-    (int)defenderPositions[0].y, 
-    2, 
-    1));
-  defenders.add(new Defender(tileSize, 
-    (int)defenderPositions[1].x, 
-    (int)defenderPositions[1].y, 
-    3, 
-    1));
-  defenders.add(new Defender(tileSize, 
-    (int)defenderPositions[2].x, 
-    (int)defenderPositions[2].y, 
-    2, 
-    1));
-  defenders.add(new Defender(tileSize, 
-    (int)defenderPositions[3].x, 
-    (int)defenderPositions[3].y, 
-    3, 
-    1));
+  spawnDefender(0);
+  spawnDefender(1);
+  spawnDefender(2);
+  spawnDefender(3);
 }
 
-void draw() { 
-  if (enemyCount > 0 && random(1) > 0.9 ) {
-    enemyCount--;
-    zombies.add(new Zombie(tileSize, 
-      (int)(w + random(100)), 
-      ((height/tileSize)/2 - pathWidth/2+(int)random(pathWidth+1))*tileSize, 
-      0, 
-      100 + (int)random(1000), 
-      1));
-  }
-  stroke(0);
-  for (int x = 0; x < grid.length; x++) {
-    for (int y = 0; y < grid[x].length; y++) {
-      fill(grid[x][y]);
-      stroke(0);
-      rect(x*tileSize, y*tileSize, tileSize, tileSize);
+Defender spawnDefender(int defenderPosition) {
+  Defender out = new Defender(tileSize, 
+    (int)defenderPositions[defenderPosition].x, 
+    (int)defenderPositions[defenderPosition].y, 
+    defenderPosition, 
+    1); 
+  defenders.add(out);
+  return out;
+}
+
+void draw() {
+  spawnZombie();
+  drawGrid();
+  moveZombies();
+  defenderAction();
+}
+
+void mouseMoved() {
+}
+
+void mousePressed() {
+  zombieSelection();
+  defenderSelection();
+}
+
+void defenderAction() {
+  for (Defender defender : defenders) {
+    stroke(0);
+    defender.render();
+    if (defender.shootTarget() <= 0) {
+      zombies.remove(defender.getTarget());
+      defender.assignTarget(randomZombie(zombies));
     }
   }
+}
+
+void moveZombies() {
   fill(#FFFFFF);
   text(barrierLP, 20, 20);
   for (Zombie zombie : zombies) {
@@ -91,33 +94,33 @@ void draw() {
     stroke(0);
     zombie.render();
   }
-  for (Defender defender : defenders) {
-    stroke(0);
-    defender.render();
-    if (defender.shootTarget() <= 0) {
-      zombies.remove(defender.getTarget());
-      defender.assignTarget(randomZombie(zombies));
+}
+
+void drawGrid() {
+  stroke(0);
+  for (int x = 0; x < grid.length; x++) {
+    for (int y = 0; y < grid[x].length; y++) {
+      fill(grid[x][y]);
+      stroke(0);
+      rect(x*tileSize, y*tileSize, tileSize, tileSize);
     }
   }
 }
 
-void mouseMoved() {
+void spawnZombie() {
+  if (enemyCount > 0 && random(1) > 0.9 ) {
+    enemyCount--;
+    zombies.add(new Zombie(tileSize, 
+      (int)(w + random(100)), 
+      ((height/tileSize)/2 - pathWidth/2+(int)random(pathWidth+1))*tileSize, 
+      0, 
+      100 + (int)random(1000), 
+      1));
+  }
 }
 
-void mousePressed() {
-  for (Zombie zombie : zombies) {
-    if (dist(zombie.getX(), zombie.getY(), mouseX, mouseY) 
-      <= zombie.getRadius()) {
-      zombie.select();
-      selectedZombie = zombie;
-      if (selectedDefender != null) {
-        selectedDefender.assignTarget(selectedZombie);
-      }
-    } else {
-      selectedZombie = null;
-      zombie.unSelect();
-    }
-  }
+
+void defenderSelection() {
   for (Defender defender : defenders) {
     if (dist(defender.getX(), defender.getY(), mouseX, mouseY) 
       <= defender.getRadius()) {
@@ -133,6 +136,22 @@ void mousePressed() {
       This is so unbelievably fugly...
        But I don't want to use fancy Lambda-stuff outside of the Processing API.
        */
+    }
+  }
+}
+
+void zombieSelection() {
+  for (Zombie zombie : zombies) {
+    if (dist(zombie.getX(), zombie.getY(), mouseX, mouseY) 
+      <= zombie.getRadius()) {
+      zombie.select();
+      selectedZombie = zombie;
+      if (selectedDefender != null) {
+        selectedDefender.assignTarget(selectedZombie);
+      }
+    } else {
+      selectedZombie = null;
+      zombie.unSelect();
     }
   }
 }
