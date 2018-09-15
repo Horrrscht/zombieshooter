@@ -64,7 +64,7 @@ void draw() {
     enemyCount--;
     zombies.add(new Zombie(tileSize, 
       (int)(w + random(100)), 
-      (14+(int)random(5))*tileSize, 
+      ((height/tileSize)/2 - pathWidth/2+(int)random(pathWidth+1))*tileSize, 
       0, 
       100 + (int)random(1000), 
       1));
