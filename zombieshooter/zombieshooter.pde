@@ -1,7 +1,7 @@
-color grid[][] = new color[32][32];
+color grid[][] = new color[64][32];
 int tileSize = 16;
 int barricadeX = tileSize * 5;
-int pathWidth = 6; // in tiles
+int pathWidth = 8; // in tiles
 
 int enemyCount = 100;
 
@@ -24,14 +24,13 @@ int w = grid.length * tileSize;
 int h = grid[0].length * tileSize;
 
 void settings() {
-
   size(w, h);
 }
 
 void setup() {
   background(0);
   for (int y = (height/tileSize)/2 - pathWidth/2; y < (height/tileSize)/2 + pathWidth/2; y++) {
-    for (int x = 0; x < grid[y].length; x++) {
+    for (int x = 0; x < grid.length; x++) {
       grid[x][y] = color(255);
     }
   }
