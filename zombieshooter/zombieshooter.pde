@@ -5,6 +5,12 @@ int pathWidth = 8; // in tiles
 
 int enemyCount = 100;
 
+enum State {
+  fighting, betweenRounds, menu;
+};
+
+State state = State.betweenRounds; 
+
 ArrayList<Zombie> zombies = new ArrayList();
 ArrayList<Defender> defenders = new ArrayList();
 
@@ -54,10 +60,23 @@ Defender spawnDefender(int defenderPosition) {
 }
 
 void draw() {
-  spawnZombie();
-  drawGrid();
-  moveZombies();
-  defenderAction();
+  switch (state) {
+  case betweenRounds:
+    drawGrid();
+    renderDefenders();
+    text("Do something", 100, 100);
+    break;
+  case fighting:
+    spawnZombie();
+    drawGrid();
+    moveZombies();
+    renderDefenders();
+    defenderAction();
+    break;
+
+  default:
+    break;
+  }
 }
 
 void mouseMoved() {
@@ -68,10 +87,28 @@ void mousePressed() {
   defenderSelection();
 }
 
-void defenderAction() {
+void keyPressed() {
+  switch (state) {
+  case betweenRounds:
+    if (key == 'f') {
+      state = State.fighting;
+    }
+    break;
+  case fighting:
+  default:
+    break;
+  }
+}
+
+void renderDefenders() {
   for (Defender defender : defenders) {
     stroke(0);
     defender.render();
+  }
+}
+
+void defenderAction() {
+  for (Defender defender : defenders) {
     if (defender.shootTarget() <= 0) {
       zombies.remove(defender.getTarget());
       defender.assignTarget(randomZombie(zombies));
