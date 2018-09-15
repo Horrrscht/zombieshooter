@@ -3,7 +3,7 @@ int tileSize = 16;
 int barricadeX = tileSize * 5;
 int pathWidth = 8; // in tiles
 
-int enemyCount = 100;
+int enemyCount = 10;
 
 enum State {
   fighting, betweenRounds, menu;
@@ -72,8 +72,10 @@ void draw() {
     moveZombies();
     renderDefenders();
     defenderAction();
+    if (zombies.size() == 0 && enemyCount == 0) {
+      state = State.betweenRounds;
+    }
     break;
-
   default:
     break;
   }
@@ -83,6 +85,14 @@ void mouseMoved() {
 }
 
 void mousePressed() {
+  switch (state) {
+  case betweenRounds:
+    state = State.fighting;
+    break;
+  case fighting:
+  default:
+    break;
+  }
   zombieSelection();
   defenderSelection();
 }
