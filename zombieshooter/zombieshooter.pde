@@ -1,20 +1,19 @@
-color grid[][] = new color[64][32];
+color grid[][] = new color[32][32];
 int tileSize = 16;
 int barricadeX = tileSize * 5;
 int pathWidth = 8; // in tiles
 
 int enemyCount = 10;
 
-enum State {
-  fighting, betweenRounds, menu;
-};
-
-State state = State.betweenRounds; 
+final int betweenRounds = 1;
+final int fighting = 2;
+final int menu = 3;
+int state = betweenRounds; 
 
 ArrayList<Zombie> zombies = new ArrayList();
 ArrayList<Defender> defenders = new ArrayList();
 
-int barrierLP = Integer.MAX_VALUE;
+int barrierLP = 9999999;
 
 PVector defenderPositions[] = {
   new PVector(3*tileSize, 10*tileSize), 
@@ -33,15 +32,23 @@ Defender selectedDefender = null;
 int w = grid.length * tileSize;
 int h = grid[0].length * tileSize;
 
+/*
 void settings() {
-  size(w, h);
+  //size(w, h);
 }
-
+*/
 void setup() {
+  size(512, 512);
+  println(height);
   background(0);
+  for (int x = 0; x < grid.length; x++) {
+   for (int y = 0; y < grid[x].length; y++) {
+    grid[x][y] = color(0); 
+   }
+  }
   for (int y = (height/tileSize)/2 - pathWidth/2; y < (height/tileSize)/2 + pathWidth/2; y++) {
     for (int x = 0; x < grid.length; x++) {
-      grid[x][y] = color(255);
+      grid[x][y] = color(#FFFFFF);
     }
   }
   for (int y = 0; y < grid[barricadeX / tileSize].length; y++) {
@@ -51,9 +58,6 @@ void setup() {
   prepareFight(10);
 }
 
-void prepareFight(int enemies) {
-  enemyCount = enemies;
-}
 
 Defender spawnRandomDefender() {
   for (int i = 0; i < usedDefenderPositions.length; i++) {
@@ -93,7 +97,7 @@ void draw() {
     renderDefenders();
     defenderAction();
     if (zombies.size() == 0 && enemyCount == 0) {
-      state = State.betweenRounds;
+      state = betweenRounds;
     }
     break;
   default:
@@ -108,7 +112,7 @@ void mousePressed() {
   switch (state) {
   case betweenRounds:
     if (mouseInRect(0, 0, 100, 100)) {
-      state = State.fighting;
+      state = fighting;
       prepareFight(10);
     }
     if (mouseInRect(100, 0, 100, 100)) {
@@ -127,7 +131,7 @@ void keyPressed() {
   switch (state) {
   case betweenRounds:
     if (key == 'f') {
-      state = State.fighting;
+      state = fighting;
       prepareFight(10);
     }
     break;
@@ -185,10 +189,10 @@ void spawnZombie() {
   if (enemyCount > 0 && random(1) > 0.9 ) {
     enemyCount--;
     zombies.add(new Zombie(tileSize, 
-      (int)(w + random(100)), 
-      ((height/tileSize)/2 - pathWidth/2+(int)random(pathWidth+1))*tileSize, 
+      int((width + random(100))), 
+      ((height/tileSize)/2 - pathWidth/2+int(random(pathWidth+1)))*tileSize, 
       0, 
-      100 + (int)random(1000), 
+      100 + int(random(1000)), 
       1));
   }
 }
@@ -235,7 +239,7 @@ void zombieSelection() {
 
 Zombie randomZombie(ArrayList<Zombie> zombies) {
   if (zombies.size() == 0) return null; 
-  return zombies.get((int)(Math.random()*zombies.size()));
+  return zombies.get(int(random(zombies.size())));
 }
 
 boolean mouseInRect(int x, int y, int w, int h) {
