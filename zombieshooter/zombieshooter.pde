@@ -1,5 +1,5 @@
-color grid[][] = new color[32][32];
-int tileSize = 16;
+color grid[][];// = new color[32][32];
+int tileSize = 32;
 int barricadeX = tileSize * 5;
 int pathWidth = 8; // in tiles
 
@@ -15,36 +15,36 @@ ArrayList<Defender> defenders = new ArrayList();
 
 int barrierLP = 9999999;
 
-PVector defenderPositions[] = {
-  new PVector(3*tileSize, 10*tileSize), 
-  new PVector(3*tileSize, 13*tileSize), 
-  new PVector(3*tileSize, 19*tileSize), 
-  new PVector(3*tileSize, 22*tileSize), 
-  new PVector(3*tileSize, 15*tileSize), 
-  new PVector(3*tileSize, 17*tileSize) 
-};
+PVector defenderPositions[] = new PVector[6];
 
 Defender usedDefenderPositions[] = new Defender[defenderPositions.length]; 
 
 Zombie selectedZombie = null;
 Defender selectedDefender = null;
 
-int w = grid.length * tileSize;
-int h = grid[0].length * tileSize;
+//int w = grid.length * tileSize;
+//int h = grid[0].length * tileSize;
 
 /*
 void settings() {
-  //size(w, h);
-}
-*/
+ //size(w, h);
+ }
+ */
 void setup() {
-  size(512, 512);
-  println(height);
+  size(1024, 512);
+  grid = new color[width/tileSize][height/tileSize];
+  defenderPositions[0] = new PVector(3*tileSize, (grid[0].length/2+1)*tileSize);
+  defenderPositions[1] = new PVector(3*tileSize, (grid[0].length/2-1)*tileSize);
+  defenderPositions[2] = new PVector(3*tileSize, (grid[0].length/2+2)*tileSize);
+  defenderPositions[3] = new PVector(3*tileSize, (grid[0].length/2-2)*tileSize);
+  defenderPositions[4] = new PVector(3*tileSize, (grid[0].length/2+3)*tileSize);
+  defenderPositions[5] = new PVector(3*tileSize, (grid[0].length/2-3)*tileSize);
+  //println(height);
   background(0);
   for (int x = 0; x < grid.length; x++) {
-   for (int y = 0; y < grid[x].length; y++) {
-    grid[x][y] = color(0); 
-   }
+    for (int y = 0; y < grid[x].length; y++) {
+      grid[x][y] = color(0);
+    }
   }
   for (int y = (height/tileSize)/2 - pathWidth/2; y < (height/tileSize)/2 + pathWidth/2; y++) {
     for (int x = 0; x < grid.length; x++) {
