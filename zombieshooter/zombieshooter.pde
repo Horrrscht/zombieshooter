@@ -8,6 +8,7 @@ int enemyCount = 10;
 final int betweenRounds = 1;
 final int fighting = 2;
 final int menu = 3;
+final int upgradeMenu = 4;
 int state = betweenRounds; 
 
 ArrayList<Zombie> zombies = new ArrayList();
@@ -21,9 +22,6 @@ Defender usedDefenderPositions[] = new Defender[defenderPositions.length];
 
 Zombie selectedZombie = null;
 Defender selectedDefender = null;
-
-//int w = grid.length * tileSize;
-//int h = grid[0].length * tileSize;
 
 /*
 void settings() {
@@ -39,7 +37,6 @@ void setup() {
   defenderPositions[3] = new PVector(3*tileSize, (grid[0].length/2-2)*tileSize);
   defenderPositions[4] = new PVector(3*tileSize, (grid[0].length/2+3)*tileSize);
   defenderPositions[5] = new PVector(3*tileSize, (grid[0].length/2-3)*tileSize);
-  //println(height);
   background(0);
   for (int x = 0; x < grid.length; x++) {
     for (int y = 0; y < grid[x].length; y++) {
@@ -55,7 +52,7 @@ void setup() {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
   spawnRandomDefender();
-  prepareFight(10);
+  //sprepareFight(10);
 }
 
 
@@ -97,8 +94,13 @@ void draw() {
     renderDefenders();
     defenderAction();
     if (zombies.size() == 0 && enemyCount == 0) {
-      state = betweenRounds;
+      //state = betweenRounds;
+      prepareBetweenRounds();
     }
+    break;
+  case upgradeMenu:
+    fill(255);
+    rect(300, 300, 100, 100);
     break;
   default:
     break;
@@ -112,26 +114,38 @@ void mousePressed() {
   switch (state) {
   case betweenRounds:
     if (mouseInRect(0, 0, 100, 100)) {
-      state = fighting;
+      //state = fighting;
       prepareFight(10);
-    }
-    if (mouseInRect(100, 0, 100, 100)) {
+    } else if (mouseInRect(100, 0, 100, 100)) {
       spawnRandomDefender();
+    } else {
+      Defender newSelected = defenderSelection();
+      if (newSelected != null) {
+        prepareUpgradeMenu(newSelected);
+        // open upgrade menu
+      }
     }
     break;
   case fighting:
+    defenderSelection();
+    zombieSelection();
+    break;
+  case upgradeMenu:
+    if (mouseInRect(300, 300, 100, 100)) {
+    } else {
+      prepareBetweenRounds();
+    }
+    break;
   default:
     break;
   }
-  zombieSelection();
-  defenderSelection();
 }
 
 void keyPressed() {
   switch (state) {
   case betweenRounds:
     if (key == 'f') {
-      state = fighting;
+      //state = fighting;
       prepareFight(10);
     }
     break;
@@ -204,13 +218,13 @@ Defender getSelectedDefender() {
       return defender;
     }
   }
-  return selectedDefender;
+  return null;
 }
 
-void defenderSelection() {
+Defender defenderSelection() {
   Defender newSelected = getSelectedDefender();
   if (newSelected == null) {
-    return;
+    return null;
   }
   newSelected.select();
   for (Defender defender : defenders) {
@@ -219,6 +233,7 @@ void defenderSelection() {
     }
   }   
   selectedDefender = newSelected;
+  return newSelected;
 }
 
 void zombieSelection() {
