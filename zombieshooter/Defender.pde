@@ -4,7 +4,7 @@ class Defender {
   private boolean isSelected = false;
   private Zombie target;
   public final int id;
-  public final int damage;
+  private int damage;
   final color selectedColor = #F02C2C;
   final color unSelectedColor = #6319E5; 
 
@@ -19,6 +19,8 @@ class Defender {
   public void render() {
     fill(isSelected?selectedColor:unSelectedColor);
     ellipse(x, y, radius, radius);
+    fill(0);
+    text(damage, x-radius/2, y);
   }
 
   public int getX() {
@@ -63,5 +65,10 @@ class Defender {
       return target.receiveDamage(damage);
     }
     return -1;
+  }
+
+  public int upgradeDamage(int amount) {
+    damage += amount;
+    return damage;
   }
 }

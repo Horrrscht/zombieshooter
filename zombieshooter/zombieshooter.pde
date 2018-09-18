@@ -85,7 +85,6 @@ void draw() {
     rect(0, 0, 100, 100);
     fill(255);
     rect(100, 0, 100, 100);
-    text("Do something", 200, 200);
     break;
   case fighting:
     spawnZombie();
@@ -99,6 +98,8 @@ void draw() {
     }
     break;
   case upgradeMenu:
+    drawGrid();
+    renderDefenders();
     fill(255);
     rect(300, 300, 100, 100);
     break;
@@ -122,7 +123,6 @@ void mousePressed() {
       Defender newSelected = defenderSelection();
       if (newSelected != null) {
         prepareUpgradeMenu(newSelected);
-        // open upgrade menu
       }
     }
     break;
@@ -132,6 +132,7 @@ void mousePressed() {
     break;
   case upgradeMenu:
     if (mouseInRect(300, 300, 100, 100)) {
+      selectedDefender.upgradeDamage(10);
     } else {
       prepareBetweenRounds();
     }
