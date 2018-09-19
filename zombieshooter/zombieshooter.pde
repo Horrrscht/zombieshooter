@@ -107,28 +107,19 @@ void mousePressed() {
 void keyPressed() {
   switch (state) {
   case betweenRounds:
-    if (key == 'f') {
-      //state = fighting;
+    switch (key) {
+    case 'f':
       prepareFight(10);
-    } 
+      break;
+    case 'm':
+      coins += 100;
+    default:
+
+      break;
+    }
     break;
   case fighting:
   default:
     break;
   }
-}
-
-void drawCoins(int amount) {
-  fill(#F50A0A);
-  text("Monies: " + amount, width - 100, 20);
-}
-
-void drawRound(int round) {
-  fill(#F50A0A);
-  text("Round: " + round, width - 200, 20);
-}
-
-void drawEnemyCount(int enemyCount) {
-  fill(#F50A0A);
-  text("Enemies: " + enemyCount, width - 300, 20);
 }
