@@ -22,15 +22,18 @@ int tileSize = 32;
 int barricadeX = tileSize * 5;
 int pathWidth = 8; // in tiles
 
-int enemyCount = 10;
+int enemyCount = 0;
+int maxEnemies = 0;
 
 void prepareFight(int enemies) {
-  enemyCount = enemies;
+  round += 1;
+  maxEnemies = int(5 * (round * 1.1));
+  enemyCount = maxEnemies;
   state = fighting;
 }
 
 void prepareBetweenRounds() {
- state = betweenRounds; 
+  state = betweenRounds;
 }
 
 void prepareUpgradeMenu(Defender selected) {
@@ -49,6 +52,9 @@ void renderDefenders() {
 void defenderAction() {
   for (Defender defender : defenders) {
     if (defender.shootTarget() <= 0) {
+      if (zombies.contains(defender.getTarget())) {
+        coins += 10;
+      }
       zombies.remove(defender.getTarget());
       defender.assignTarget(randomZombie(zombies));
     }
@@ -161,7 +167,7 @@ Defender spawnDefender(int defenderPosition) {
     (int)defenderPositions[defenderPosition].x, 
     (int)defenderPositions[defenderPosition].y, 
     defenderPosition, 
-    1); 
+    3); 
   defenders.add(out);
   usedDefenderPositions[defenderPosition] = out;
   return out;

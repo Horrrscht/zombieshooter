@@ -1,3 +1,5 @@
+int coins = 100;
+int round = 0;
 
 void setup() {
   size(1024, 512);
@@ -57,6 +59,9 @@ void draw() {
   default:
     break;
   }
+  drawCoins(coins);
+  drawRound(round);
+  drawEnemyCount(maxEnemies);
 }
 
 void mouseMoved() {
@@ -69,7 +74,10 @@ void mousePressed() {
       //state = fighting;
       prepareFight(10);
     } else if (mouseInRect(100, 0, 100, 100)) {
-      spawnRandomDefender();
+      if (coins >= 100 && defenders.size() < defenderPositions.length) {
+        coins -= 100;
+        spawnRandomDefender();
+      }
     } else {
       Defender newSelected = defenderSelection();
       if (newSelected != null) {
@@ -83,7 +91,10 @@ void mousePressed() {
     break;
   case upgradeMenu:
     if (mouseInRect(300, 300, 100, 100)) {
-      selectedDefender.upgradeDamage(10);
+      if (coins >= 50) {
+        coins -= 50;
+        selectedDefender.upgradeDamage(2);
+      }
     } else {
       prepareBetweenRounds();
     }
@@ -99,10 +110,25 @@ void keyPressed() {
     if (key == 'f') {
       //state = fighting;
       prepareFight(10);
-    }
+    } 
     break;
   case fighting:
   default:
     break;
   }
+}
+
+void drawCoins(int amount) {
+  fill(#F50A0A);
+  text("Monies: " + amount, width - 100, 20);
+}
+
+void drawRound(int round) {
+  fill(#F50A0A);
+  text("Round: " + round, width - 200, 20);
+}
+
+void drawEnemyCount(int enemyCount) {
+  fill(#F50A0A);
+  text("Enemies: " + enemyCount, width - 300, 20);
 }
