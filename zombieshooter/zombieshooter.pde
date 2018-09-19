@@ -36,8 +36,12 @@ void draw() {
     renderDefenders();
     fill(100);
     rect(0, 0, 100, 100);
+    fill(0);
+    text("Start game", 10, 20);
     fill(255);
     rect(100, 0, 100, 100);
+    fill(0);
+    text("Buy new tower\nfor 100 coins", 110, 20);
     break;
   case fighting:
     spawnZombie();
@@ -54,7 +58,7 @@ void draw() {
     drawGrid();
     renderDefenders();
     fill(255);
-    rect(300, 300, 100, 100);
+    rect(300, 300, 120, 100);
     fill(0);
     text("Upgrade for " + upgradeCost(selectedDefender), 320, 320);
     break;
@@ -92,7 +96,7 @@ void mousePressed() {
     zombieSelection();
     break;
   case upgradeMenu:
-    if (mouseInRect(300, 300, 100, 100)) {
+    if (mouseInRect(300, 300, 120, 100)) {
       int calculatedCost = upgradeCost(selectedDefender);
       if (coins >= calculatedCost) {
         coins -= calculatedCost;
