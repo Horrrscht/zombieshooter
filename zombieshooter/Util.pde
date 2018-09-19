@@ -187,3 +187,7 @@ void drawEnemyCount(int enemyCount) {
   fill(#F50A0A);
   text("Enemies: " + enemyCount, width - 300, 20);
 }
+
+int upgradeCost(Defender defender) {
+  return int(pow(2, defender.getDamage()));
+}

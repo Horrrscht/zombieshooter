@@ -55,6 +55,8 @@ void draw() {
     renderDefenders();
     fill(255);
     rect(300, 300, 100, 100);
+    fill(0);
+    text("Upgrade for " + upgradeCost(selectedDefender), 320, 320);
     break;
   default:
     break;
@@ -91,8 +93,9 @@ void mousePressed() {
     break;
   case upgradeMenu:
     if (mouseInRect(300, 300, 100, 100)) {
-      if (coins >= 50) {
-        coins -= 50;
+      int calculatedCost = upgradeCost(selectedDefender);
+      if (coins >= calculatedCost) {
+        coins -= calculatedCost;
         selectedDefender.upgradeDamage(2);
       }
     } else {

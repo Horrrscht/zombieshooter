@@ -71,4 +71,8 @@ class Defender {
     damage += amount;
     return damage;
   }
+
+  public int getDamage() {
+    return damage;
+  }
 }
