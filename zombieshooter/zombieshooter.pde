@@ -1,5 +1,3 @@
-int coins = 100;
-int round = 0;
 
 void setup() {
   size(1024, 512);
@@ -25,23 +23,16 @@ void setup() {
     grid[barricadeX / tileSize][y] = color(#9B6E37);
   }
   spawnRandomDefender();
-  //sprepareFight(10);
 }
 
-
 void draw() {
+  background(0);
   switch (state) {
   case betweenRounds:
     drawGrid();
     renderDefenders();
-    fill(100);
-    rect(0, 0, 100, 100);
-    fill(0);
-    text("Start game", 10, 20);
-    fill(255);
-    rect(100, 0, 100, 100);
-    fill(0);
-    text("Buy new tower\nfor 100 coins", 110, 20);
+    drawBuyTowerBox();
+    drawStartGameBox();
     break;
   case fighting:
     spawnZombie();
@@ -50,17 +41,13 @@ void draw() {
     renderDefenders();
     defenderAction();
     if (zombies.size() == 0 && enemyCount == 0) {
-      //state = betweenRounds;
       prepareBetweenRounds();
     }
     break;
   case upgradeMenu:
     drawGrid();
     renderDefenders();
-    fill(255);
-    rect(300, 300, 120, 100);
-    fill(0);
-    text("Upgrade for " + upgradeCost(selectedDefender), 320, 320);
+    drawUpgradeBox();
     break;
   default:
     break;
@@ -77,8 +64,7 @@ void mousePressed() {
   switch (state) {
   case betweenRounds:
     if (mouseInRect(0, 0, 100, 100)) {
-      //state = fighting;
-      prepareFight(10);
+      prepareFight();
     } else if (mouseInRect(100, 0, 100, 100)) {
       if (coins >= 100 && defenders.size() < defenderPositions.length) {
         coins -= 100;
@@ -116,7 +102,7 @@ void keyPressed() {
   case betweenRounds:
     switch (key) {
     case 'f':
-      prepareFight(10);
+      prepareFight();
       break;
     case 'm':
       coins += 100;

@@ -1,31 +1,6 @@
 
-final int betweenRounds = 1;
-final int fighting = 2;
-final int menu = 3;
-final int upgradeMenu = 4;
-int state = betweenRounds; 
 
-ArrayList<Zombie> zombies = new ArrayList();
-ArrayList<Defender> defenders = new ArrayList();
-
-int barrierLP = 9999999;
-
-PVector defenderPositions[] = new PVector[6];
-
-Defender usedDefenderPositions[] = new Defender[defenderPositions.length]; 
-
-Zombie selectedZombie = null;
-Defender selectedDefender = null;
-
-color grid[][];// = new color[32][32];
-int tileSize = 32;
-int barricadeX = tileSize * 5;
-int pathWidth = 8; // in tiles
-
-int enemyCount = 0;
-int maxEnemies = 0;
-
-void prepareFight(int enemies) {
+void prepareFight() {
   round += 1;
   maxEnemies = int(5 * (round * 1.1));
   enemyCount = maxEnemies;
@@ -190,4 +165,25 @@ void drawEnemyCount(int enemyCount) {
 
 int upgradeCost(Defender defender) {
   return int(pow(2, defender.getDamage()));
+}
+
+void drawUpgradeBox() {
+  fill(255);
+  rect(300, 300, 120, 100);
+  fill(0);
+  text("Upgrade for " + upgradeCost(selectedDefender), 320, 320);
+}
+
+void drawBuyTowerBox() {
+  fill(255);
+  rect(100, 0, 100, 100);
+  fill(0);
+  text("Buy new tower\nfor 100 coins", 110, 20);
+}
+
+void drawStartGameBox() {
+  fill(100);
+  rect(0, 0, 100, 100);
+  fill(0);
+  text("Start game", 10, 20);
 }
